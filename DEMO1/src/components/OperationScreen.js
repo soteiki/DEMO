@@ -3,7 +3,8 @@ import { View, Button, StyleSheet, Image, ImageBackground, TouchableOpacity, Tex
 import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 
 import BG from '../assets/BG.png';
-import QR from '../assets/QR.png'
+import QR from '../assets/QR.png';
+import TestQR from '../assets/TestQR.png'
 
 const OperationScreen = ({ navigation }) => {
   const handleMatchJudgment = () => {
@@ -41,7 +42,7 @@ const OperationScreen = ({ navigation }) => {
           isActive={true}
         />
       ) : (
-        <Image style={styles.imgChild} source={QR} />
+        <Image style={styles.imgChild} source={TestQR} />
       )}
       {/* </View> */}
       <TouchableOpacity 
@@ -87,8 +88,8 @@ const styles = StyleSheet.create({
     height: 500,
   },
   camera: {
-    width: 550,
-    height: 550,
+    width: 500,
+    height: 500,
   },
 });
 
