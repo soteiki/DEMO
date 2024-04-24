@@ -1,5 +1,6 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { View, Button, StyleSheet, Image, ImageBackground, TouchableOpacity, Text } from 'react-native';
+import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 
 import BG from '../assets/BG.png';
 import QR from '../assets/QR.png'
@@ -19,11 +20,30 @@ const OperationScreen = ({ navigation }) => {
 
   const handlecamare = () => {
     console.log('camera....');
+    {Camerastate ? (Setcamerastate(0)):(Setcamerastate(1))};
   };
+
+  const [Camerastate, Setcamerastate] = useState(0);
+
+  const device = useCameraDevice('back')
+  const { hasPermission, setPermission } = useCameraPermission()
+
+  if (!hasPermission) return <PermissionsPage />;
+  if (device == null) return <NoCameraDeviceError />;
 
   return (
     <View style={styles.root}>
-      <Image style={styles.imgChild} source={QR}/>
+      {/* <View> */}
+      {Camerastate ? (
+        <Camera
+          style={styles.camera}
+          device={device}
+          isActive={true}
+        />
+      ) : (
+        <Image style={styles.imgChild} source={QR} />
+      )}
+      {/* </View> */}
       <TouchableOpacity 
         style = {styles.btnstyle} 
         onPress={handlecamare}
@@ -65,6 +85,10 @@ const styles = StyleSheet.create({
   imgChild: {
     width: 500,
     height: 500,
+  },
+  camera: {
+    width: 550,
+    height: 550,
   },
 });
 
