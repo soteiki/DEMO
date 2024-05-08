@@ -1,6 +1,6 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import { View, Button, StyleSheet, Image, ImageBackground, TouchableOpacity, Text } from 'react-native';
-import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
+import { Camera, useCameraDevice, useCameraPermission, useCodeScanner, onCodeScanned } from 'react-native-vision-camera';
 
 import BG from '../assets/BG.png';
 import QR from '../assets/QR.png';
@@ -21,16 +21,27 @@ const OperationScreen = ({ navigation }) => {
 
   const handlecamare = () => {
     console.log('camera....');
-    {Camerastate ? (Setcamerastate(0)):(Setcamerastate(1))};
+    Camerastate ? (Setcamerastate(0)):(Setcamerastate(1));
   };
 
   const [Camerastate, Setcamerastate] = useState(0);
-
   const device = useCameraDevice('back')
   const { hasPermission, setPermission } = useCameraPermission()
 
-  if (!hasPermission) return <PermissionsPage />;
-  if (device == null) return <NoCameraDeviceError />;
+  const handleBarCodeScanned = () => {
+    Setcamerastate(0);
+    console.log('扫描到的二维码数据:');
+    // 在这里处理扫描到的二维码数据，例如跳转到相关页面或执行其他操作
+  };
+
+  const codeScanner = useCodeScanner({
+
+    codeTypes: ['qr', 'ean-13'],
+
+    onCodeScanned: (codes) => {
+        console.log(`Scanned ${codes.length} codes!`)
+    }
+  });
 
   return (
     <View style={styles.root}>
@@ -40,6 +51,8 @@ const OperationScreen = ({ navigation }) => {
           style={styles.camera}
           device={device}
           isActive={true}
+          codeScanner={codeScanner}
+          // onCodeScanned={handleBarCodeScanned}
         />
       ) : (
         <Image style={styles.imgChild} source={TestQR} />
